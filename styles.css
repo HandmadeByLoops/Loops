@@ -435,3 +435,122 @@ input:focus,textarea:focus{border-color:rgba(196,113,138,.48);background:rgba(19
   body{cursor:auto}
   #cursor-dot,#cursor-ring,#cursor-glow{display:none}
 }
+/* FLOAT BUTTON */
+#chatbot-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(107,143,113,.35);
+  z-index:99999;
+  transition:transform .3s var(--ease-silk);
+}
+#chatbot-btn:hover{ transform:scale(1.1); }
+
+/* CHAT WINDOW */
+#chatbot{
+  position:fixed;
+  bottom:95px;
+  right:25px;
+  width:340px;
+  height:480px;
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:22px;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:99999;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+/* HEADER */
+#chat-header{
+  padding:12px 15px;
+  background:rgba(255,255,255,.25);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--font-serif);
+  cursor:grab;
+}
+
+/* MESSAGES */
+#chat-messages{
+  flex:1;
+  padding:12px;
+  overflow-y:auto;
+  font-family:var(--font-sans);
+  font-size:.85rem;
+  color:var(--text-main);
+}
+
+.msg{
+  margin:8px 0;
+  padding:10px 12px;
+  border-radius:14px;
+  max-width:80%;
+  animation:fadeUp .3s ease;
+}
+
+.user{
+  background:var(--primary-light);
+  color:white;
+  margin-left:auto;
+}
+
+.bot{
+  background:rgba(255,255,255,.4);
+  border:1px solid var(--glass-border);
+}
+
+/* INPUT */
+#chat-input{
+  display:flex;
+  padding:10px;
+  border-top:1px solid var(--glass-border);
+}
+
+#chat-input input{
+  flex:1;
+  padding:10px;
+  border-radius:999px;
+  border:1px solid var(--glass-border);
+  background:rgba(255,255,255,.3);
+  outline:none;
+  color:var(--text-main);
+}
+
+#chat-input button{
+  margin-left:8px;
+  border:none;
+  border-radius:999px;
+  padding:10px 14px;
+  background:var(--primary);
+  color:white;
+  cursor:pointer;
+}
+
+/* TYPING */
+#typing{
+  font-size:.75rem;
+  padding:0 12px 6px;
+  color:var(--text-muted);
+  display:none;
+  font-style:italic;
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1; transform:translateY(0);}
+}
