@@ -435,3 +435,49 @@ input:focus,textarea:focus{border-color:rgba(196,113,138,.48);background:rgba(19
   body{cursor:auto}
   #cursor-dot,#cursor-ring,#cursor-glow{display:none}
 }
+#chat-toggle {
+  transition: all 0.3s ease;
+  animation: floatBtn 3s ease-in-out infinite;
+}
+
+#chat-toggle:hover {
+  transform: scale(1.12);
+}
+
+@keyframes floatBtn {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* smoother open animation */
+#chatbox {
+  animation: pop 0.25s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* message bubbles upgrade */
+#messages div {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* input glow effect */
+#chatInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
