@@ -130,3 +130,60 @@ document.addEventListener('DOMContentLoaded',()=>{
   setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-80)el.classList.add('visible')}),3500);
   const hash=window.location.hash.replace('#','');if(hash&&document.getElementById(hash))navigateTo(hash);
 });
+const chatBtn = document.getElementById("chatbot-btn");
+const chatBox = document.getElementById("chatbot");
+const closeBtn = document.getElementById("chat-close");
+const messages = document.getElementById("chat-messages");
+const typing = document.getElementById("typing");
+
+chatBtn.onclick = () => {
+  chatBox.style.display = "flex";
+};
+
+closeBtn.onclick = () => {
+  chatBox.style.display = "none";
+};
+
+/* SEND MESSAGE */
+function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  typing.style.display = "block";
+
+  setTimeout(() => {
+    typing.style.display = "none";
+    addMessage(generateResponse(text), "bot");
+  }, 900);
+}
+
+/* ⌨️ ENTER KEY SUPPORT */
+document.getElementById("userInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+/* MESSAGE UI */
+function addMessage(text, type){
+  const div = document.createElement("div");
+  div.className = `msg ${type}`;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+/* SIMPLE AI (replace later with API) */
+function generateResponse(input){
+  const replies = [
+    "That’s interesting — tell me more.",
+    "I see what you mean.",
+    "Let me think about that...",
+    "Here’s a suggestion based on your idea.",
+  ];
+  return replies[Math.floor(Math.random()*replies.length)];
+}
