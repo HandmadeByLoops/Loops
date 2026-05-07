@@ -130,3 +130,66 @@ document.addEventListener('DOMContentLoaded',()=>{
   setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-80)el.classList.add('visible')}),3500);
   const hash=window.location.hash.replace('#','');if(hash&&document.getElementById(hash))navigateTo(hash);
 });
+function toggleChat() {
+  const box = document.getElementById("chatbox");
+
+  if (box.style.display === "block") {
+    box.style.opacity = "0";
+    box.style.transform = "translateY(10px)";
+
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 150);
+
+  } else {
+    box.style.display = "block";
+    box.style.opacity = "0";
+    box.style.transform = "translateY(10px)";
+
+    setTimeout(() => {
+      box.style.opacity = "1";
+      box.style.transform = "translateY(0)";
+    }, 10);
+  }
+}
+
+/* CHAT HANDLER (PREMIUM VERSION) */
+async function handleChat() {
+  const input = document.getElementById("chatInput");
+  const messages = document.getElementById("messages");
+
+  const text = input.value;
+  if (!text) return;
+
+  // USER MESSAGE (clean bubble)
+  const userMsg = document.createElement("div");
+  userMsg.className = "user-msg";
+  userMsg.textContent = text;
+  messages.appendChild(userMsg);
+
+  input.value = "";
+
+  // SCROLL
+  messages.scrollTop = messages.scrollHeight;
+
+  // TYPING INDICATOR
+  const typing = document.createElement("div");
+  typing.className = "ai-msg";
+  typing.style.opacity = "0.6";
+  typing.textContent = "AI is typing...";
+  messages.appendChild(typing);
+
+  // GET AI RESPONSE
+  const reply = await sendChatMessage(text);
+
+  typing.remove();
+
+  // AI MESSAGE
+  const aiMsg = document.createElement("div");
+  aiMsg.className = "ai-msg";
+  aiMsg.textContent = reply;
+  messages.appendChild(aiMsg);
+
+  // SCROLL AGAIN
+  messages.scrollTop = messages.scrollHeight;
+}
