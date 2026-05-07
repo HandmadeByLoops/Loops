@@ -145,7 +145,7 @@ closeBtn.onclick = () => {
 };
 
 /* SEND MESSAGE */
-async function sendMessage() {
+function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
   if (!text) return;
@@ -155,32 +155,10 @@ async function sendMessage() {
 
   typing.style.display = "block";
 
-  try {
-    const res = await fetch("https://handmadebyloops.app.n8n.cloud/webhook/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: text
-      })
-    });
-
-    const data = await res.json();
-
+  setTimeout(() => {
     typing.style.display = "none";
-
-    const reply =
-      data.reply ||
-      "Sorry, I couldn't generate a response.";
-
-    addMessage(reply, "bot");
-
-  } catch (err) {
-    typing.style.display = "none";
-    addMessage("⚠️ Error connecting to assistant", "bot");
-    console.error(err);
-  }
+    addMessage(generateResponse(text), "bot");
+  }, 900);
 }
 /* ⌨️ ENTER KEY SUPPORT */
 document.getElementById("userInput").addEventListener("keydown", function (e) {
