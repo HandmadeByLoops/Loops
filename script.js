@@ -160,6 +160,7 @@ function sendMessage() {
     addMessage(generateResponse(text), "bot");
   }, 900);
 }
+
 /* ⌨️ ENTER KEY SUPPORT */
 document.getElementById("userInput").addEventListener("keydown", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
