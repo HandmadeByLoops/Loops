@@ -472,9 +472,29 @@
 </footer>
 
 <div id="toast"></div>
+<!-- CHATBOT FLOAT BUTTON -->
+<div id="chatbot-btn">💬</div>
+
+<!-- CHAT WINDOW -->
+<div id="chatbot">
+  <div id="chat-header">
+    <span>AI Assistant</span>
+    <button id="chat-close">×</button>
+  </div>
+
+  <div id="chat-messages"></div>
+
+  <div id="typing">AI is typing...</div>
+
+  <div id="chat-input">
+    <input type="text" placeholder="Ask something..." id="userInput" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
 
 <!-- External scripts: keep load order — EmailJS before script.js -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>
