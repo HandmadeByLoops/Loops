@@ -155,13 +155,10 @@ function sendMessage() {
 
   typing.style.display = "block";
 
- setTimeout(async () => {
-  typing.style.display = "none";
-
-  const reply = await generateResponse(text);
-  addMessage(reply, "bot");
-
-}, 900);
+  setTimeout(() => {
+    typing.style.display = "none";
+    addMessage(generateResponse(text), "bot");
+  }, 900);
 }
 
 /* ⌨️ ENTER KEY SUPPORT */
@@ -180,79 +177,13 @@ function addMessage(text, type){
   messages.scrollTop = messages.scrollHeight;
 }
 
-/* REAL AI USING OPENROUTER */
-
-async function generateResponse(input){
-
-  try {
-
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-
-        headers: {
-          "Authorization": "Bearer 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",
-          "Content-Type": "application/json",
-          "HTTP-Referer": window.location.href,
-          "X-Title": "My AI Website"
-        },
-
-        body: JSON.stringify({
-
-          model: "google/gemini-2.0-flash-001",
-
-         messages: [
-  {
-    role: "system",
-    content: `
-You are CrochetBot, the official AI assistant of a crochet brand website.
-
-BRAND INFORMATION:
-- Brand name: Handmade By Loops
-- Website: https://handmadebyloops.github.io/Loops/ 
-- Instagram: https://www.instagram.com/handmadebyloop
-- Facebook: https://www.facebook.com/profile.php?id=61572119824349&rdid=wfspr3yBeWCODIBq&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1CGiqiMTW2%2F#
-- YouTube: https://www.youtube.com/@handmadebyloops
-- Location: Karachi, Pakistan 
-- Orders: Available through website or contact page
-- QR Code: Available on website homepage for quick ordering/contact
-
-PRODUCT RULES:
-- Only use provided product catalog for pricing
-- Never invent products or prices
-
-BEHAVIOR RULES:
-- If user asks about Instagram, Facebook, YouTube → provide correct link
-- If user asks about website → explain and provide link
-- If user asks about location → answer using brand location
-- If user asks about QR code → say it's available on homepage for quick access
-- If question is unrelated → respond politely and guide them back to crochet products or store info
-- Always sound like a friendly small business assistant
-- Keep answers short and helpful
-`
-  },
-  {
-    role: "user",
-    content: input
-  }
-]
-
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    return (
-      data.choices?.[0]?.message?.content ||
-      "No response from AI."
-    );
-
-  } catch (error) {
-
-    console.log(error);
-
-    return "Error connecting to AI.";
-  }
+/* SIMPLE AI (replace later with API) */
+function generateResponse(input){
+  const replies = [
+    "That’s interesting — tell me more.",
+    "I see what you mean.",
+    "Let me think about that...",
+    "Here’s a suggestion based on your idea.",
+  ];
+  return replies[Math.floor(Math.random()*replies.length)];
 }
