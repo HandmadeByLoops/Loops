@@ -113,8 +113,38 @@
       form.addEventListener('submit',function(e){
         e.preventDefault();
         emailjs.sendForm('service_xkt6xzb','template_m2s2fta',this)
-          .then(()=>{document.getElementById('formSuccess').classList.remove('hidden');form.reset();showToast("Message sent! We'll reply soon 💌")})
-          .catch(err=>{console.log(err);showToast('Failed to send ❌')});
+          .then(()=>{
+
+  // ✅ STEP 1: SAVE DATA BEFORE RESET
+  const name = form.querySelector('[name="name"]').value;
+  const email = form.querySelector('[name="email"]').value;
+  const subject = form.querySelector('[name="subject"]').value;
+  const message = form.querySelector('[name="message"]').value;
+
+  document.getElementById('formSuccess').classList.remove('hidden');
+
+  showToast("Message sent! We'll reply soon 💌");
+
+  // 👉 MAKE.COM (NOW SAFE)
+  fetch("https://hook.us2.make.com/rfaflqgjig6h3ytvppqeswbtbjrdekn1", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: name,
+      email: email,
+      subject: subject,
+      message: message
+    })
+  })
+  .then(() => console.log("Sent to Make"))
+  .catch(err => console.log("Make error:", err));
+
+  // ✅ STEP 2: RESET AFTER EVERYTHING
+  form.reset();
+
+});
       });
     }
     /* INIT */
