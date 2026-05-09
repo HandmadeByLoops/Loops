@@ -204,17 +204,3 @@
       return "Error connecting to AI.";
     }
   }
-
-fetch("https://handmadebyloops.app.n8n.cloud/webhook-test/contact-form", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    message: document.getElementById("message").value
-  })
-})
-.then(response => console.log("Sent to n8n"))
-.catch(error => console.error(error));
