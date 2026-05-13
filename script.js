@@ -60,6 +60,47 @@
   }
   function toggleCart(){document.getElementById('cartModal').classList.toggle('hidden')}
 
+  /* 👇 ADD THIS HERE */
+async function checkoutCart() {
+  if (cart.length === 0) {
+    showToast("Cart is empty 🧶");
+    return;
+  }
+
+  const order = {
+  name: "Guest",
+
+  // send ONE product per order (your current backend design)
+  product: cart.map(i => i.name).join(", "),
+
+  price: cart.reduce((s,i)=>s+i.price*i.qty,0),
+
+  quantity: cart.reduce((s,i)=>s+i.qty,0),
+
+  time: new Date().toISOString()
+};
+
+  try {
+    const res = await fetch("https://cart-api.handmadebyloopss.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+    const data = await res.json();
+    console.log("ORDER SENT:", data);
+
+    showToast("Order placed successfully 🎉");
+
+    cart = [];
+    updateCartUI();
+
+  } catch (err) {
+    console.log(err);
+    showToast("Checkout failed ❌");
+  }
+}
+
   /* TOAST */
   function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000)}
 
