@@ -535,10 +535,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      const captcha = document.querySelector('[name="cf-turnstile-response"]');
+      const captchaResponse = grecaptcha.getResponse();
 
-if (!captcha || !captcha.value) {
-  showToast("Please verify captcha 🛡️");
+if (!captchaResponse) {
+  showToast("Please complete CAPTCHA 🛡️");
   return;
 }
       emailjs.sendForm('service_xkt6xzb', 'template_m2s2fta', this)
@@ -563,6 +563,7 @@ if (!captcha || !captcha.value) {
           .catch(err => console.log("Make error:", err));
 
           form.reset();
+          grecaptcha.reset();
         });
     });
   }
