@@ -535,6 +535,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      const captcha = document.querySelector('[name="cf-turnstile-response"]');
+
+if (!captcha || !captcha.value) {
+  showToast("Please verify captcha 🛡️");
+  return;
+}
       emailjs.sendForm('service_xkt6xzb', 'template_m2s2fta', this)
         .then(() => {
 
