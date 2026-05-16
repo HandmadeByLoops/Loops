@@ -1,0 +1,569 @@
+/* ============================================================
+   HANDMADE BY LOOPS — Animation & Performance Polish Layer
+   Add this as a <link> AFTER styles.css in your HTML <head>
+   ✅ Non-destructive — only adds/overrides animations & polish
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────
+   1. UNIFIED EASING SYSTEM
+   All timings and curves live here for easy tuning
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Durations */
+  --dur-instant: 80ms;
+  --dur-fast:    200ms;
+  --dur-mid:     380ms;
+  --dur-slow:    600ms;
+  --dur-xslow:   900ms;
+
+  /* Easings */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);        /* snappy decelerate */
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);          /* smooth both ends  */
+  --ease-bounce:  cubic-bezier(0.34, 1.4, 0.64, 1);      /* subtle overshoot  */
+  --ease-spring:  cubic-bezier(0.175, 0.885, 0.32, 1.275);/* springy lift      */
+  --ease-silk:    cubic-bezier(0.23, 1, 0.32, 1);         /* keep original too */
+
+  /* Elevation System */
+  --shadow-xs:  0 1px 4px rgba(0,0,0,.18);
+  --shadow-sm:  0 4px 16px rgba(0,0,0,.24);
+  --shadow-md:  0 12px 36px rgba(0,0,0,.32);
+  --shadow-lg:  0 28px 70px rgba(0,0,0,.42);
+  --shadow-xl:  0 50px 130px rgba(0,0,0,.55);
+  --shadow-rose:0 8px 28px rgba(107,143,113,.32);
+
+  /* Spacing rhythm (8px base) */
+  --space-1: 0.5rem;   /* 8px  */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-6: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. CURSOR — smoother with will-change
+   ───────────────────────────────────────────────────────────── */
+#cursor-dot,
+#cursor-ring,
+#cursor-glow {
+  will-change: transform, left, top;
+  /* Use transform for position instead of left/top for GPU compositing.
+     JS still drives left/top — this just hints the GPU to pre-promote */
+}
+
+/* Cursor scale on any interactive element hover */
+a:hover ~ #cursor-ring,
+button:hover ~ #cursor-ring {
+  width: 52px;
+  height: 52px;
+  background: rgba(107,143,113,.1);
+  border-color: var(--primary);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. SCROLL REVEAL — GPU-only (no layout properties)
+   Replaces translateY with translateY + opacity only
+   ───────────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  will-change: transform, opacity;
+  transition:
+    opacity  var(--dur-xslow) var(--ease-out),
+    transform var(--dur-xslow) var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto; /* release after animation completes */
+}
+
+/* Staggered delays — keep same class names */
+.rd1 { transition-delay: 80ms; }
+.rd2 { transition-delay: 160ms; }
+.rd3 { transition-delay: 240ms; }
+.rd4 { transition-delay: 320ms; }
+.rd5 { transition-delay: 400ms; }
+.rd6 { transition-delay: 480ms; }
+
+/* ─────────────────────────────────────────────────────────────
+   4. BUTTON MICRO-INTERACTIONS
+   Press-down effect + consistent hover lift
+   ───────────────────────────────────────────────────────────── */
+.btn {
+  transition:
+    transform     var(--dur-mid)  var(--ease-spring),
+    box-shadow    var(--dur-mid)  var(--ease-out),
+    background    var(--dur-fast) var(--ease-in-out),
+    border-color  var(--dur-fast) var(--ease-in-out),
+    opacity       var(--dur-fast) var(--ease-in-out);
+  will-change: transform;
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.018);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.974);
+  box-shadow: var(--shadow-xs);
+  transition-duration: var(--dur-instant);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 12px 38px rgba(107,143,113,.45), var(--shadow-rose);
+}
+
+.btn-outline:hover {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+}
+
+/* Add-to-cart button */
+.add-cart-btn {
+  transition:
+    transform  var(--dur-mid)  var(--ease-spring),
+    box-shadow var(--dur-mid)  var(--ease-out),
+    background var(--dur-fast) var(--ease-in-out);
+  will-change: transform;
+}
+
+.add-cart-btn:hover {
+  transform: scale(1.08) translateY(-1px);
+  box-shadow: 0 8px 22px rgba(107,143,113,.38);
+}
+
+.add-cart-btn:active {
+  transform: scale(0.96) translateY(1px);
+  transition-duration: var(--dur-instant);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. PRODUCT CARDS — smooth tilt + image zoom
+   Tilt is driven by JS; this ensures transitions are GPU-only
+   ───────────────────────────────────────────────────────────── */
+.product-card {
+  will-change: transform;
+  transform: perspective(900px) translateZ(0);
+  transition:
+    transform  var(--dur-slow) var(--ease-out),
+    box-shadow var(--dur-slow) var(--ease-out),
+    border-color var(--dur-mid) var(--ease-in-out);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.product-img img {
+  will-change: transform;
+  transition: transform var(--dur-xslow) var(--ease-out);
+}
+
+.product-card:hover .product-img img {
+  transform: scale(1.07);
+}
+
+.product-overlay {
+  transition: opacity var(--dur-mid) var(--ease-in-out);
+}
+
+.product-wishlist {
+  transition:
+    transform  var(--dur-mid)  var(--ease-spring),
+    opacity    var(--dur-mid)  var(--ease-out),
+    background var(--dur-fast) var(--ease-in-out);
+  will-change: transform, opacity;
+}
+
+.product-wishlist:hover {
+  transform: scale(1.2);
+}
+
+.product-wishlist:active {
+  transform: scale(0.9);
+  transition-duration: var(--dur-instant);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. NAV LINKS — refined underline animation
+   ───────────────────────────────────────────────────────────── */
+.nav-link {
+  transition:
+    color       var(--dur-mid)  var(--ease-out),
+    background  var(--dur-mid)  var(--ease-out);
+}
+
+.nav-link::after {
+  transition: transform var(--dur-mid) var(--ease-spring);
+}
+
+/* Navbar scroll state — add subtle border glow */
+.navbar.scrolled {
+  transition:
+    background   var(--dur-slow) var(--ease-out),
+    padding      var(--dur-slow) var(--ease-out),
+    box-shadow   var(--dur-slow) var(--ease-out),
+    border-color var(--dur-slow) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. BLOG CARDS — consistent lift system
+   ───────────────────────────────────────────────────────────── */
+.blog-card {
+  will-change: transform;
+  transition:
+    transform    var(--dur-slow)  var(--ease-spring),
+    box-shadow   var(--dur-slow)  var(--ease-out),
+    border-color var(--dur-mid)   var(--ease-in-out);
+  transform: translateY(0) translateZ(0);
+}
+
+.blog-card:hover {
+  transform: translateY(-10px) translateZ(0);
+  box-shadow: var(--shadow-lg), 0 0 60px rgba(107,143,113,.08);
+}
+
+.blog-card-img img {
+  will-change: transform;
+  transition: transform var(--dur-xslow) var(--ease-out);
+}
+
+.blog-card:hover .blog-card-img img {
+  transform: scale(1.06);
+}
+
+.blog-read-more {
+  transition: gap var(--dur-mid) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. FEATURE CARDS — elevation on hover
+   ───────────────────────────────────────────────────────────── */
+.feature-card {
+  will-change: transform;
+  transition:
+    transform    var(--dur-slow)  var(--ease-spring),
+    box-shadow   var(--dur-slow)  var(--ease-out),
+    border-color var(--dur-mid)   var(--ease-in-out);
+  transform: translateY(0) translateZ(0);
+}
+
+.feature-card:hover {
+  transform: translateY(-12px) translateZ(0);
+}
+
+.feature-icon {
+  display: block;
+  transition: transform var(--dur-mid) var(--ease-spring), filter var(--dur-mid) var(--ease-out);
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.18) translateY(-3px);
+  filter: drop-shadow(0 6px 18px rgba(107,143,113,.4));
+}
+
+/* ─────────────────────────────────────────────────────────────
+   9. PORTFOLIO ITEMS — unified with card system
+   ───────────────────────────────────────────────────────────── */
+.portfolio-item {
+  will-change: transform;
+  transition:
+    transform    var(--dur-slow)  var(--ease-spring),
+    box-shadow   var(--dur-slow)  var(--ease-out),
+    border-color var(--dur-mid)   var(--ease-in-out);
+  transform: translateY(0) translateZ(0);
+}
+
+.portfolio-item:hover {
+  transform: translateY(-8px) translateZ(0);
+}
+
+.portfolio-img img {
+  will-change: transform;
+  transition: transform var(--dur-xslow) var(--ease-out);
+}
+
+.portfolio-item:hover .portfolio-img img {
+  transform: scale(1.06);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   10. FORM INPUTS — focus state with smooth ring
+   ───────────────────────────────────────────────────────────── */
+.form-group input,
+.form-group textarea,
+.subscribe-box input,
+.track-form input,
+.footer-sub-form input,
+.acc-form-wrap input {
+  transition:
+    border-color var(--dur-mid)  var(--ease-out),
+    background   var(--dur-mid)  var(--ease-out),
+    box-shadow   var(--dur-mid)  var(--ease-out);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.subscribe-box input:focus,
+.track-form input:focus,
+.footer-sub-form input:focus,
+.acc-form-wrap input:focus {
+  border-color: rgba(107,143,113,.55);
+  background: rgba(107,143,113,.04);
+  box-shadow: 0 0 0 3px rgba(107,143,113,.1);
+  outline: none;
+}
+
+/* Label float-like emphasis on focus */
+.form-group:focus-within label {
+  color: var(--primary-light);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11. CART PANEL — smoother slide + item rows
+   ───────────────────────────────────────────────────────────── */
+.cart-panel {
+  animation: slideInRight var(--dur-slow) var(--ease-out) forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.cart-item-row {
+  transition:
+    background  var(--dur-mid)  var(--ease-out),
+    opacity     var(--dur-mid)  var(--ease-out);
+}
+
+.cart-item-row:hover {
+  background: rgba(255,255,255,.04);
+  border-radius: 10px;
+}
+
+.cart-item-remove {
+  transition:
+    color      var(--dur-fast) var(--ease-out),
+    transform  var(--dur-mid)  var(--ease-spring);
+}
+
+.cart-item-remove:hover {
+  transform: scale(1.2) rotate(90deg);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   12. FILTER BUTTONS — press effect
+   ───────────────────────────────────────────────────────────── */
+.filter-btn {
+  transition:
+    background   var(--dur-mid)  var(--ease-out),
+    color        var(--dur-mid)  var(--ease-out),
+    border-color var(--dur-mid)  var(--ease-out),
+    transform    var(--dur-mid)  var(--ease-spring),
+    box-shadow   var(--dur-mid)  var(--ease-out);
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+}
+
+.filter-btn:active {
+  transform: translateY(1px) scale(0.97);
+  transition-duration: var(--dur-instant);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   13. FAQ ITEMS — smoother accordion
+   ───────────────────────────────────────────────────────────── */
+.faq-q {
+  transition:
+    background   var(--dur-mid)  var(--ease-out),
+    border-color var(--dur-mid)  var(--ease-out),
+    color        var(--dur-mid)  var(--ease-out);
+}
+
+.faq-q span {
+  transition: transform var(--dur-mid) var(--ease-spring);
+}
+
+.faq-a {
+  transition: max-height var(--dur-slow) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   14. SOCIAL LINKS — x-axis slide on hover
+   ───────────────────────────────────────────────────────────── */
+.social-link-btn {
+  transition:
+    transform    var(--dur-mid)  var(--ease-spring),
+    color        var(--dur-mid)  var(--ease-out),
+    border-color var(--dur-mid)  var(--ease-out),
+    background   var(--dur-mid)  var(--ease-out);
+}
+
+.social-link-btn:hover {
+  transform: translateX(6px);
+}
+
+/* Footer socials — rotate on hover */
+.footer-socials a {
+  transition:
+    transform    var(--dur-mid)  var(--ease-spring),
+    background   var(--dur-mid)  var(--ease-out),
+    border-color var(--dur-mid)  var(--ease-out),
+    color        var(--dur-mid)  var(--ease-out);
+}
+
+.footer-socials a:hover {
+  transform: translateY(-4px) rotate(-8deg);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   15. HERO IMAGE — entrance + hover refined
+   ───────────────────────────────────────────────────────────── */
+.hero-img-wrap {
+  transition:
+    transform   var(--dur-xslow) var(--ease-out),
+    box-shadow  var(--dur-slow)  var(--ease-out);
+  will-change: transform;
+}
+
+.hero-img-wrap:hover {
+  transform: scale(1.02) translateY(-4px);
+  box-shadow: var(--shadow-xl), 0 0 80px rgba(107,143,113,.1);
+}
+
+.hero-img-wrap img {
+  will-change: transform;
+  transition: transform var(--dur-xslow) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   16. PAGE TRANSITIONS — smooth active page reveal
+   When a page becomes .active, fade it in
+   ───────────────────────────────────────────────────────────── */
+.page {
+  animation: none; /* reset */
+}
+
+.page.active {
+  animation: pageIn var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   17. TOAST — nicer spring entrance
+   ───────────────────────────────────────────────────────────── */
+#toast {
+  transition:
+    transform var(--dur-slow) var(--ease-spring);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   18. CHATBOT WINDOW — smooth open/close
+   ───────────────────────────────────────────────────────────── */
+#chatbot {
+  animation: chatIn var(--dur-mid) var(--ease-spring) both;
+  transform-origin: bottom right;
+}
+
+@keyframes chatIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+#chatbot-btn {
+  transition: transform var(--dur-mid) var(--ease-spring), box-shadow var(--dur-mid) var(--ease-out);
+}
+
+#chatbot-btn:hover {
+  transform: scale(1.12) rotate(-6deg);
+  box-shadow: 0 14px 40px rgba(107,143,113,.42);
+}
+
+#chatbot-btn:active {
+  transform: scale(0.96);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   19. GLASS CARDS — depth shimmer on hover
+   Adds subtle gradient shimmer without layout changes
+   ───────────────────────────────────────────────────────────── */
+.contact-card,
+.qr-section-card,
+.subscribe-box,
+.track-box,
+.deal-card,
+.acc-form-wrap {
+  transition:
+    box-shadow   var(--dur-slow) var(--ease-out),
+    border-color var(--dur-mid)  var(--ease-out),
+    transform    var(--dur-slow) var(--ease-spring);
+  transform: translateY(0) translateZ(0);
+}
+
+.deal-card:hover {
+  box-shadow: var(--shadow-md), 0 0 40px rgba(107,143,113,.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   20. STRIP MARQUEE — pause on hover (premium detail)
+   ───────────────────────────────────────────────────────────── */
+.strip:hover .strip-inner {
+  animation-play-state: paused;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   21. REDUCED MOTION — respect accessibility preferences
+   All motion collapses to simple fade for users who prefer it
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   22. PERFORMANCE — contain layout for heavy sections
+   ───────────────────────────────────────────────────────────── */
+.products-grid,
+.blog-grid,
+.features-grid,
+.portfolio-grid {
+  contain: layout style;
+}
+
+.product-card,
+.blog-card,
+.feature-card,
+.portfolio-item {
+  contain: layout style;
+  isolation: isolate;
+}
