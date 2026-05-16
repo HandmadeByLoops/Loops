@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Handmade by Loops – handcrafted crochet products made with love. Shop keychains, tote bags, crochet flowers and more." />
@@ -346,6 +347,8 @@
             <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="your@email.com" required/></div>
             <div class="form-group"><label>Subject</label><input type="text" name="subject" placeholder="Custom order / General inquiry"/></div>
             <div class="form-group"><label>Message</label><textarea name="message" rows="5" placeholder="Tell us what you need..." required></textarea></div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADQiu0rGTHT2XxsE"></div>
+
             <button type="submit" class="btn btn-primary">Send Message 💌</button>
           </form>
           <div id="formSuccess" class="form-success hidden"><span>✅</span> Thank you! We'll get back to you within 24 hours.</div>
@@ -387,9 +390,13 @@
         <div class="acc-form-wrap">
           <h2>Welcome back 🌸</h2>
           <form class="contact-form" onsubmit="return false;">
-            <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
-            <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••"/></div>
-            <button class="btn btn-primary" style="width:100%;justify-content:center">Login</button>
+            <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="your@email.com"/></div>
+            <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"/></div>
+           <button type="button" class="btn btn-primary"
+style="width:100%;justify-content:center"
+onclick="login()">
+Login
+</button>
           </form>
           <p class="acc-note">Don't have an account? <a href="#" onclick="switchTab('register',null)">Register here</a></p>
         </div>
@@ -398,10 +405,12 @@
         <div class="acc-form-wrap">
           <h2>Create account ✨</h2>
           <form class="contact-form" onsubmit="return false;">
-            <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
-            <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
-            <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••"/></div>
-            <button class="btn btn-primary" style="width:100%;justify-content:center">Create Account</button>
+            <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Your name"/></div>
+            <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="your@email.com"/></div>
+            <div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="••••••••"/></div>
+            <button type="button" class="btn btn-primary" style="width:100%;justify-content:center" onclick="registerUser()">
+  Create Account
+</button>
           </form>
         </div>
       </div>
@@ -499,7 +508,11 @@
 
 <!-- Scripts: EmailJS must load before script.js -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script src="script.js"></script>
 
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script type="module" src="firebase.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
